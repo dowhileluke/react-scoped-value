@@ -1,17 +1,18 @@
 import { isAbsolute } from 'path'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { babel } from '@rollup/plugin-babel'
+import pkg from './package.json'
 
 export default {
-  input: 'src/slice.js',
+  input: 'src/scope.js',
   external: id => !id.startsWith('.') && !isAbsolute(id),
   output: [
     {
-      file: 'dist/index.js',
+      file: pkg.module,
       format: 'es',
     },
     {
-      file: 'dist/index.cjs',
+      file: pkg.main,
       format: 'cjs',
     },
   ],
