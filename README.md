@@ -1,4 +1,4 @@
-# react-context-slice
+# react-scoped-value
 A simple way to pass and update partial context values.
 
 #### Demo
