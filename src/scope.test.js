@@ -180,4 +180,42 @@ describe('Scope/useScopedValue', () => {
 
     expect(onSubmit).toBeCalledWith(expectedState)
   })
+
+  test('removal example', () => {
+    function SelfDestructButton({ label }) {
+      const [, setList] = useScopedValue()
+
+      function destroy() {
+        setList(prev => prev.filter(x => x !== label))
+      }
+
+      return (
+        <button onClick={() => destroy()}>
+          {label}
+        </button>
+      )
+    }
+
+    function App() {
+      const [buttons, setButtons] = useState(['A', 'B', 'C', 'D', 'E'])
+
+      return (
+        <Scope value={buttons} setValue={setButtons}>
+          {buttons.map(b => (
+            <SelfDestructButton key={b} label={b} />
+          ))}
+        </Scope>
+      )
+    }
+
+    render(<App />)
+
+    expect(screen.getAllByRole('button')).toHaveLength(5)
+    expect(screen.getByText('B')).toBeInTheDocument()
+
+    userEvent.click(screen.getByText('B'))
+
+    expect(screen.getAllByRole('button')).toHaveLength(4)
+    expect(screen.queryByText('B')).not.toBeInTheDocument()
+  })
 })

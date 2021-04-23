@@ -8,8 +8,8 @@ describe('trace()', () => {
     ['bracket notation', x => x['a']['b'], ['a', 'b']]
   ]
 
-  test.each(cases)('%s', (_, input, result) => {
-    expect(trace(input)).toEqual(result)
+  test.each(cases)('%s', (_, input, intended) => {
+    expect(trace(input)).toEqual(intended)
   })
 })
 
@@ -34,7 +34,7 @@ describe('apply()', () =>{
 })
 
 describe('partialApply()', () => {
-  it('provides the correct callback', () => {
+  it('matches result from apply()', () => {
     const data = {
       users: [
         { id: 1, name: 'A', age: 1 },
@@ -43,14 +43,15 @@ describe('partialApply()', () => {
       ]
     }
 
-    const callback = partialApply(x => x.users[0].name, () => 'Z')
-    const result = callback(data)
+    const selectorFn = x => x.users[0].name
+    const newValue = 'Z'
 
-    expect(result).not.toBe(data)
-    expect(result.users).not.toBe(data.users)
-    expect(result.users[0]).not.toBe(data.users[0])
-    expect(result.users[0].name).toBe('Z')
-    expect(result.users[1]).toBe(data.users[1])
+    const intended = apply(data, selectorFn, newValue)
+    const partialFn = partialApply(selectorFn, () => newValue)
+    const result = partialFn(data)
+
+    expect(result).toEqual(intended)
+    expect(result.users[1]).toBe(intended.users[1])
   })
 
   it('creates callbacks that work in any order', () => {

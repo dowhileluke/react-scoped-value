@@ -56,7 +56,7 @@ export function apply(source, locatorFn, value) {
 /** creates an apply function that can be passed to setState */
 export function partialApply(locatorFn, valueFn) {
   return function (source) {
-    const scoped = locatorFn(source)
+    const scoped = locatorFn ? locatorFn(source) : source
     const value = valueFn(scoped)
 
     return apply(source, locatorFn, value)
