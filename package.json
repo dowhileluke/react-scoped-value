@@ -1,6 +1,6 @@
 {
   "name": "react-scoped-value",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple way to read and update partial context values",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
